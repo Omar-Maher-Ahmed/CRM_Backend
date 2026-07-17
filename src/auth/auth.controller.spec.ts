@@ -11,7 +11,8 @@
 //// 1- Give User
 //// 2- Compare Password
 //// 3- If there is an error
-//// 4- If true, Generate Token
+//// 4- If true, Generate Token 
+//// 5- set it in database
 //// 5- Token is back
 
 // Profile	GET /auth/profile
