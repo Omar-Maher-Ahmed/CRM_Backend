@@ -1,0 +1,55 @@
+# الكيان اللي فوق هو اللي بيؤدي لإنشاء اللي تحت
+
+
+Employee
+      │
+      ▼
+Customer
+      │
+      ▼
+Deal
+      │
+      ▼
+Products
+      │
+      ▼
+Activities
+
+# Overview Flow about application 
+
+Admin
+ │
+ │
+ ├──────────────┐
+ │              │
+ ▼              ▼
+Create Roles   Create Employees
+                     │
+                     ▼
+              Employee Login
+                     │
+                     ▼
+          Create Customer (Lead)
+                     │
+                     ▼
+          Customer becomes managed
+                     │
+                     ▼
+             Create Deal
+                     │
+          Select Deal Stage
+                     │
+                     ▼
+          Add Products to Deal
+                     │
+                     ▼
+      Save Quantity & Selling Price
+                     │
+                     ▼
+          Add Activities
+                     │
+                     ▼
+      Move Deal Between Stages
+                     │
+                     ▼
+              Deal Closed
