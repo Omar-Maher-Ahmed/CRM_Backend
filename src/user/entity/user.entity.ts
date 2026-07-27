@@ -24,7 +24,7 @@ export class User {
     @Column()
     phone: string;
 
-    @Column()
+    @Column(({ select: false }))
     passwordHash: string;
 
     @Column()
@@ -34,7 +34,9 @@ export class User {
     // @ManyToOne()
     // role: Role;
 
-    @ManyToOne(() => User, (user) => user.employees)
+    @ManyToOne(() => User, (user) => user.employees,{
+          nullable: true,
+    })
     manager: User;
 
     @OneToMany(() => User,(user) => user.manager)
