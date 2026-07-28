@@ -2,13 +2,13 @@ import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { User } from './entity/user.entity';
 import { UsersService } from './user.service';
 import { CreateUserInput } from './dto/create-user.input';
+import { UpdateUserInput } from './dto';
 
 @Resolver(() => User)
 export class UsersResolver  {
   constructor(
     private readonly usersService: UsersService,
   ) {}
-
 
   @Mutation(() => User)
   createUser(
@@ -29,13 +29,15 @@ export class UsersResolver  {
     return this.usersService.findOne(id);
   }
 
-  @Mutation(() => String)
+  @Mutation(() => User)
   updateUser(
-    @Args('id', { type: () => ID })
-    id: string,
-  ) {}
+    @Args('id', { type: () => ID }) id: number,
+    @Args('input') input: UpdateUserInput,
+  ) {
+    return this.usersService.updateUser(id, input);
+  }
 
-  @Mutation(() => String)
+  @Mutation(() => User)
   removeUser(
     @Args('id', { type: () => ID })
     id: string,

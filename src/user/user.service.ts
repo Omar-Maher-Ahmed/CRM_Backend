@@ -114,9 +114,54 @@ export class UsersService {
     }
 
 
-
-
 // Update User []
+    private async validateUpdateUser(
+        user: User,
+        dto: UpdateUserInput,
+    ): Promise<void>{
+
+
+    }
+
+    private applyUserUpdates(
+        user: User,
+        dto: UpdateUserInput,
+    ): User {
+    // Object.assign(user, dto);
+    // return user;
+
+     if (dto.fullName !== undefined) {
+        user.fullName = dto.fullName;
+    }
+
+    if (dto.email !== undefined) {
+        user.email = dto.email;
+    }
+
+    if (dto.phone !== undefined) {
+        user.phone = dto.phone;
+    }
+
+    if (dto.salary !== undefined) {
+        user.salary = dto.salary;
+    }
+    return user;
+    }
+
+
+    async updateUser(
+        id: number,
+        dto: UpdateUserInput,
+    ): Promise<User> {
+        const user = await this.getUserOrThrow(id);
+
+        await this.validateUpdateUser(user, dto);
+
+        this.applyUserUpdates(user, dto);
+
+        return this.userRepository.save(user);
+    }
+
 // Update Password[]
 // Delete User[]
 // Delete Customer[]
