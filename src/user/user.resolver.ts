@@ -10,23 +10,24 @@ export class UsersResolver  {
   ) {}
 
 
-  @Mutation(() => String)
+  @Mutation(() => User)
   createUser(
     @Args('input') input: CreateUserInput,
-  ) {
+  ): Promise<User> {
       return this.usersService.create(input);
   }
 
-  @Query(() => String)
-  users() {
+  @Query(() => [User])
+  getAllUsers() {
     return this.usersService.findAll();
   }
 
-  @Query(() => String)
-  getUser
-   (@Args('id', { type: () => ID })
-    id: number
-  ){}
+  @Query(() => User)
+  getUser(
+    @Args('id', { type: () => ID }) id: number,
+  ): Promise<User> {
+    return this.usersService.findOne(id);
+  }
 
   @Mutation(() => String)
   updateUser(

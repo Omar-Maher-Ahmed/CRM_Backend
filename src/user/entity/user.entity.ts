@@ -1,3 +1,4 @@
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -8,25 +9,30 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-
+@ObjectType()
 @Entity('users')
 export class User {
 
+    @Field(() => ID)
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Field()
     @Column()
     fullName: string;
 
+    @Field()
     @Column()
     email: string;
 
+    @Field()
     @Column()
     phone: string;
 
     @Column(({ select: false }))
     passwordHash: string;
 
+    @Field()
     @Column()
     salary: number;
 
@@ -42,12 +48,15 @@ export class User {
     @OneToMany(() => User,(user) => user.manager)
     employees: User[];
 
-    @Column()
+    @Field()
+    @Column({ default: true })
     isActive: boolean;
 
+    @Field()
     @CreateDateColumn()
     createdAt: Date;
 
+    @Field()
     @UpdateDateColumn()
     updatedAt: Date;
 }

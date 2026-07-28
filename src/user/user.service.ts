@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entity/user.entity';
 import { Repository } from 'typeorm';
@@ -23,7 +23,7 @@ export class UsersService {
     5. Return
     */
 
-//checkEmailExists
+    //checkEmailExists
     private async checkEmailExists(email: string): Promise<void> {
     const existingUser = await this.userRepository.findOne({
         where: { email },
@@ -35,7 +35,7 @@ export class UsersService {
     }
 
 
-//checkPhoneExists
+    //checkPhoneExists
     private async checkPhoneExists(phone: string): Promise<void> {
     const existingUser = await this.userRepository.findOne({
         where: { phone },
@@ -46,7 +46,7 @@ export class UsersService {
     }
     }
 
-//validateCreateUser
+    //validateCreateUser
     private async validateCreateUser(dto: CreateUserInput): Promise<void>
     {
     await this.checkEmailExists(dto.email);
@@ -67,10 +67,11 @@ export class UsersService {
         return this.userRepository.create({
         ...dto,
         passwordHash,
+        isActive: true,
     });
     }
 
-// Create User
+    // Create User
     async create(dto: CreateUserInput) {
             await this.validateCreateUser(dto);
             
@@ -79,17 +80,46 @@ export class UsersService {
             const user = this.buildUser(dto, passwordHash);
 
             return this.userRepository.save(user);
-        }
+    }
     
 
 
-  findAll(): string {
-    return 'Hello from Users Service !';
-  }
+    // Get ALL Users
 
-  Create(data: CreateUserInput): string {
-    return 'Create user'
-  }
+    private async getUsers(): Promise<User[]> {
+        return this.userRepository.find();
+    }
+    
+    async findAll(): Promise<User[]> {
+        return this.getUsers()
+    }
+
+    // Get User By Id
+
+    private async getUserOrThrow(id: number): Promise<User>{
+    const user = await this.userRepository.findOne({
+        where: { id },
+
+    });
+        if (!user) {
+        throw new NotFoundException(`User with id ${id} not found`);
+    }
+
+    return user;
+    }
+
+
+    async findOne(id: number): Promise<User> {
+        return this.getUserOrThrow(id)
+    }
+
+
+
+
+// Update User []
+// Update Password[]
+// Delete User[]
+// Delete Customer[]
 
 }
 
