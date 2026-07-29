@@ -26,6 +26,7 @@ type Query {
 type Mutation {
   createUser(input: CreateUserInput!): User!
   updateUser(id: ID!, input: UpdateUserInput!): User!
+  updatePassword(id: ID!, input: UpdatePasswordInput!): Boolean!
   removeUser(id: ID!): User!
 }
 
@@ -45,4 +46,10 @@ input UpdateUserInput {
   password: String
   salary: Float
   managerId: ID
+}
+
+input UpdatePasswordInput {
+  currentPassword: String!
+  newPassword: String!
+  confirmPassword: String!
 }

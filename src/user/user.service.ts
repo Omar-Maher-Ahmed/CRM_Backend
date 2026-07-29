@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entity/user.entity';
 import { Repository } from 'typeorm';
@@ -118,10 +118,7 @@ export class UsersService {
     private async validateUpdateUser(
         user: User,
         dto: UpdateUserInput,
-    ): Promise<void>{
-
-
-    }
+    ): Promise<void>{}
 
     private applyUserUpdates(
         user: User,
@@ -148,7 +145,6 @@ export class UsersService {
     return user;
     }
 
-
     async updateUser(
         id: number,
         dto: UpdateUserInput,
@@ -163,6 +159,53 @@ export class UsersService {
     }
 
 // Update Password[]
+    private async verifyCurrentPassword(
+    user: User,
+    currentPassword: string,
+    ): Promise<void> {
+    const isPasswordValid = await bcrypt.compare(
+        currentPassword,
+        user.passwordHash,);
+          
+        if (!isPasswordValid) {
+    throw new UnauthorizedException('Current password is incorrect.');
+  }
+    }
+
+    private async validateUpdatePasswordUser(
+    user: User,
+    dto: UpdatePasswordInput,
+    ): Promise<void> {
+        await this.verifyCurrentPassword(user, dto.currentPassword);
+
+        if (dto.newPassword !== dto.confirmPassword) {
+            throw new BadRequestException(
+            'New password and confirm password do not match.',
+            );
+        }
+
+        if (dto.currentPassword === dto.newPassword) {
+            throw new BadRequestException(
+            'New password must be different from current password.',
+            );
+        }
+    }
+
+    async updatePassword(
+        id: number,
+        dto: UpdatePasswordInput,
+    ): Promise<void> {
+        const user = await this.getUserOrThrow(id);
+
+        await this.validateUpdatePasswordUser(user, dto);
+
+        const passwordHash = await this.passwordHash(dto.newPassword);
+
+        user.passwordHash = passwordHash;
+
+        await this.userRepository.save(user);
+    }
+
 // Delete User[]
 // Delete Customer[]
 
