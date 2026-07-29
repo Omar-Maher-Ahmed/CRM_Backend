@@ -109,6 +109,23 @@ export class UsersService {
     }
 
 
+    // Get User With Password
+    private async getUserWithPasswordOrThrow(
+    id: number,
+    ): Promise<User> {
+    const user = await this.userRepository
+        .createQueryBuilder('user')
+        .addSelect('user.passwordHash')
+        .where('user.id = :id', { id })
+        .getOne();
+
+    if (!user) {
+        throw new NotFoundException(`User with id ${id} not found`);
+    }
+
+    return user;
+    }
+
     async findOne(id: number): Promise<User> {
         return this.getUserOrThrow(id)
     }
@@ -163,7 +180,11 @@ export class UsersService {
     user: User,
     currentPassword: string,
     ): Promise<void> {
-    const isPasswordValid = await bcrypt.compare(
+    
+    console.log('currentPassword:', currentPassword);
+    console.log('passwordHash:', user.passwordHash);
+    console.log(user);
+        const isPasswordValid = await bcrypt.compare(
         currentPassword,
         user.passwordHash,);
           
@@ -195,7 +216,7 @@ export class UsersService {
         id: number,
         dto: UpdatePasswordInput,
     ): Promise<void> {
-        const user = await this.getUserOrThrow(id);
+        const user = await this.getUserWithPasswordOrThrow(id);
 
         await this.validateUpdatePasswordUser(user, dto);
 
