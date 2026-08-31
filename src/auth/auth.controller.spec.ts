@@ -28,3 +28,41 @@
 // Logout	POST /auth/logout
 //// 1- Verify Refresh Token
 //// 2- Remove Refresh Token
+
+
+// auth
+// │
+// ├── dto
+// │      login.dto.ts
+// │      register.dto.ts
+// │      refresh.dto.ts
+// │
+// ├── guards
+// │      jwt-auth.guard.ts
+// │      jwt-refresh.guard.ts
+// │
+// ├── strategies
+// │      access-token.strategy.ts
+// │      refresh-token.strategy.ts
+// │
+// ├── decorators
+// │      current-user.decorator.ts
+// │
+// ├── interfaces
+// │      jwt-payload.interface.ts
+// │
+// ├── auth.controller.ts
+// ├── auth.service.ts
+// ├── auth.module.ts
+// └── auth.repository.ts
+
+
+// POST   /auth/register
+
+// POST   /auth/login
+
+// GET    /auth/profile
+
+// POST   /auth/refresh
+
+// POST   /auth/logout

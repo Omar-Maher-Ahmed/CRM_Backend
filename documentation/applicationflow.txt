@@ -53,3 +53,52 @@ Create Roles   Create Employees
                      │
                      ▼
               Deal Closed
+
+
+
+
+
+
+
+to build any flow in This Project use this way:
+
+Requirements
+        │
+        ▼
+Database Design
+        │
+        ▼
+API Design
+        │
+        ▼
+Folder Structure
+        │
+        ▼
+DTO
+        │
+        ▼
+Entity
+        │
+        ▼
+Repository / Service
+        │
+        ▼
+Controller / Resolver
+        │
+        ▼
+Authentication
+        │
+        ▼
+Authorization
+        │
+        ▼
+Validation
+        │
+        ▼
+Unit Test
+        │
+        ▼
+Integration Test
+        │
+        ▼
+Swagger

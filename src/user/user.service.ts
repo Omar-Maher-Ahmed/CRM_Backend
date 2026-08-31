@@ -228,6 +228,16 @@ export class UsersService {
     }
 
 // Delete User[]
+
+async deleteUser(id: number): Promise<boolean> {
+  const user = await this.getUserOrThrow(id);
+
+  await this.userRepository.delete(user);
+
+  return true;
+}
+
+
 // Delete Customer[]
 
 }

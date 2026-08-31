@@ -46,10 +46,11 @@ export class UsersResolver  {
     return true;
   }
 
-  @Mutation(() => User)
-  removeUser(
-    @Args('id', { type: () => ID })
-    id: string,
-  ) {}
+  @Mutation(() => Boolean)
+  async deleteUser(
+    @Args('id', { type: () => ID }) id: number,
+  ): Promise<boolean> {
+    return this.usersService.deleteUser(id)
+  }
 
 }

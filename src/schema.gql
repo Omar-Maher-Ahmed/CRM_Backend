@@ -27,7 +27,7 @@ type Mutation {
   createUser(input: CreateUserInput!): User!
   updateUser(id: ID!, input: UpdateUserInput!): User!
   updatePassword(id: ID!, input: UpdatePasswordInput!): Boolean!
-  removeUser(id: ID!): User!
+  deleteUser(id: ID!): Boolean!
 }
 
 input CreateUserInput {
