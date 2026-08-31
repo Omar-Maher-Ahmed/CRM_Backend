@@ -130,6 +130,14 @@ export class UsersService {
         return this.getUserOrThrow(id)
     }
 
+    async findByEmailWithPassword(email: string): Promise<User | null> {
+        return this.userRepository
+            .createQueryBuilder('user')
+            .addSelect('user.passwordHash')
+            .where('user.email = :email', { email })
+            .getOne();
+    }
+
 
 // Update User []
     private async validateUpdateUser(
