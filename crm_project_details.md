@@ -2,6 +2,48 @@
 
 ---
 
+## 🛠️ دليل البدء والتشغيل لأعضاء الفريق (Setup Guide)
+
+لتشغيل المشروع على جهازك المحلي (Localhost) كعضو في الفريق، يرجى اتباع الخطوات التالية بالترتيب:
+
+### 1️⃣ تحميل الاعتمادات (Install Dependencies)
+قم بفتح الـ Terminal في مجلد المشروع وقم بتشغيل الأمر التالي لتحميل كل الحزم (Packages) اللازمة:
+```bash
+npm install
+```
+
+### 2️⃣ إعداد متغيرات البيئة (Environment Variables)
+يجب التأكد من وجود ملف `.env` في المسار الرئيسي للمشروع، ويجب أن يحتوي على الأقل على القيم التالية:
+```env
+DB_PORT=5432
+DB_HOST=localhost
+DB_USERNAME="postgres"
+DB_PASSWORD=123456  # (أو الباسورد الخاص بالداتابيز عندك)
+DB_DATABASE="crm"
+PORT=5000
+JWT_ACCESS_SECRET=helloWorld
+```
+
+### 3️⃣ تشغيل قاعدة البيانات (Database Setup)
+المشروع جاهز بملف `docker-compose.yml` لإنشاء قاعدة بيانات PostgreSQL بسهولة، قم بتشغيل هذا الأمر:
+```bash
+docker-compose up -d
+```
+*(تأكد من أن تطبيق Docker Desktop يعمل على جهازك).*
+
+### 4️⃣ تشغيل السيرفر (Run the Server)
+الآن يمكنك تشغيل المشروع في وضع التطوير (Development Mode) باستخدام الأمر:
+```bash
+npm run start:dev
+```
+عند نجاح التشغيل، سترى رسالة: `🚀 Application is running on: http://localhost:5000`
+
+### 5️⃣ الروابط الهامة بعد التشغيل
+- **مسار الدخول (REST API):** `http://localhost:5000/auth/login`
+- **واجهة GraphQL:** `http://localhost:5000/graphql` (يمكنك استخدامها لاختبار الـ Queries والـ Mutations).
+
+---
+
 ## 💡 1. ما هي فكرة المشروع؟
 المشروع عبارة عن **نظام إدارة علاقات العملاء (CRM)** من جهة الخادم (Backend).
 تم بناء النظام باستخدام تقنيات حديثة وقوية لضمان الأداء العالي والقابلية للتوسع، وتشمل:
