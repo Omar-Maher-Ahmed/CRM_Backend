@@ -13,7 +13,11 @@ export class CustomerService {
     return this.repo.save(customer);
   }
   findAll() { return this.repo.find(); }
-  findOne(id: number) { return this.repo.findOne({ where: { id } }); }
+  async findOne(id: number) {
+    const record = await this.repo.findOne({ where: { id } });
+    if (!record) throw new NotFoundException('Customer not found');
+    return record;
+  }
   async update(id: number, input: UpdateCustomerInput) {
     const customer = await this.findOne(id);
     if (!customer) throw new NotFoundException('Customer not found');

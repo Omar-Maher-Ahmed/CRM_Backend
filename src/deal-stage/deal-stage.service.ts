@@ -10,7 +10,11 @@ export class DealStageService {
   constructor(@InjectRepository(DealStage) private repo: Repository<DealStage>) {}
   create(input: CreateDealStageInput) { return this.repo.save(this.repo.create(input)); }
   findAll() { return this.repo.find({ order: { position: 'ASC' } }); }
-  findOne(id: number) { return this.repo.findOne({ where: { id } }); }
+  async findOne(id: number) {
+    const record = await this.repo.findOne({ where: { id } });
+    if (!record) throw new NotFoundException('Deal Stage not found');
+    return record;
+  }
   async update(id: number, input: UpdateDealStageInput) {
     const item = await this.findOne(id);
     if (!item) throw new NotFoundException('DealStage not found');

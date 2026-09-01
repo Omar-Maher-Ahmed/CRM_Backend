@@ -153,7 +153,7 @@ input CreateRoleInput {
 
 input UpdateRoleInput {
   name: String
-  id: ID!
+  id: Int!
 }
 
 input CreateCustomerInput {
@@ -172,7 +172,7 @@ input UpdateCustomerInput {
   phone: String
   status: String
   managerId: Int
-  id: ID!
+  id: Int!
 }
 
 input CreateProductInput {
@@ -187,7 +187,7 @@ input UpdateProductInput {
   description: String
   price: Float
   imageUrl: String
-  id: ID!
+  id: Int!
 }
 
 input CreateDealStageInput {
@@ -198,7 +198,7 @@ input CreateDealStageInput {
 input UpdateDealStageInput {
   name: String
   position: Int
-  id: ID!
+  id: Int!
 }
 
 input CreateDealInput {
@@ -224,7 +224,7 @@ input UpdateDealInput {
   ownerId: Int
   stageId: Int
   products: [CreateDealProductInput!]
-  id: ID!
+  id: Int!
 }
 
 input CreateActivityInput {
@@ -239,5 +239,5 @@ input UpdateActivityInput {
   dealId: Int
   userId: Int
   productId: Int
-  id: ID!
+  id: Int!
 }

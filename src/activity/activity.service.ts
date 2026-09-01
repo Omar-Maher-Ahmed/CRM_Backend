@@ -20,7 +20,11 @@ export class ActivityService {
   }
   
   findAll() { return this.repo.find(); }
-  findOne(id: number) { return this.repo.findOne({ where: { id } }); }
+  async findOne(id: number) {
+    const record = await this.repo.findOne({ where: { id } });
+    if (!record) throw new NotFoundException('Activity not found');
+    return record;
+  }
   
   async update(id: number, input: UpdateActivityInput) {
     const item = await this.repo.findOne({ where: { id } });

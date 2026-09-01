@@ -1,0 +1,601 @@
+{
+  "info": {
+    "name": "CRM Backend API - Full Suite",
+    "description": "Comprehensive manual testing suite for the CRM Backend covering all CRUD operations for every module.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "http://localhost:5000/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@crm.com\",\n  \"password\": \"AdminPassword123!\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData && jsonData.access_token) {",
+                  "    pm.collectionVariables.set(\"jwt_token\", jsonData.access_token);",
+                  "    console.log(\"Token saved!\");",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2. Roles",
+      "item": [
+        {
+          "name": "Create Role",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createRole(createRoleInput: {\n    name: \"Sales Manager\"\n  }) {\n    id\n    name\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Get All Roles",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  roles {\n    id\n    name\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Get Role By ID",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  role(id: 1) {\n    id\n    name\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Update Role",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  updateRole(updateRoleInput: {\n    id: 1,\n    name: \"Super Admin\"\n  }) {\n    id\n    name\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Delete Role",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  removeRole(id: 4)\n}"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Users",
+      "item": [
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createUser(input: {\n    fullName: \"Omar Maher\",\n    email: \"omar.new@example.com\",\n    phone: \"01122334466\",\n    password: \"MySecretPassword\",\n    salary: 5000,\n    roleId: 3\n  }) {\n    id\n    fullName\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  getAllUsers {\n    id\n    fullName\n    email\n    role {\n      name\n    }\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Get User By ID",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  getUser(id: 1) {\n    id\n    fullName\n    email\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  updateUser(id: 2, input: {\n    fullName: \"Omar Maher Updated\",\n    salary: 6000\n  }) {\n    id\n    fullName\n    salary\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Update Password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  updatePassword(id: 2, input: {\n    currentPassword: \"MySecretPassword\",\n    newPassword: \"NewPassword123!\",\n    confirmPassword: \"NewPassword123!\"\n  })\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  deleteUser(id: 3)\n}"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Customers",
+      "item": [
+        {
+          "name": "Create Customer",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createCustomer(input: {\n    name: \"Tech Corp\",\n    companyName: \"Tech Corp LLC\",\n    email: \"contact@techcorp.com\",\n    phone: \"123456789\",\n    status: \"Active\"\n  }) {\n    id\n    name\n    companyName\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Get All Customers",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  customers {\n    id\n    name\n    email\n    status\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Get Customer By ID",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  customer(id: 1) {\n    id\n    name\n    companyName\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Update Customer",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  updateCustomer(input: {\n    id: 1,\n    name: \"Tech Corp Updated\",\n    status: \"Inactive\"\n  }) {\n    id\n    name\n    status\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Delete Customer",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  removeCustomer(id: 2)\n}"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Products",
+      "item": [
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createProduct(input: {\n    name: \"CRM Pro License\",\n    description: \"Annual subscription\",\n    price: 1200.00\n  }) {\n    id\n    name\n    price\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  products {\n    id\n    name\n    price\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Get Product By ID",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  product(id: 1) {\n    id\n    name\n    description\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  updateProduct(input: {\n    id: 1,\n    price: 1500.00\n  }) {\n    id\n    name\n    price\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  removeProduct(id: 2)\n}"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Deal Stages",
+      "item": [
+        {
+          "name": "Create Deal Stage",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createDealStage(input: {\n    name: \"Lead\",\n    position: 1\n  }) {\n    id\n    name\n    position\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Get All Deal Stages",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  dealStages {\n    id\n    name\n    position\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Get Deal Stage By ID",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  dealStage(id: 1) {\n    id\n    name\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Update Deal Stage",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  updateDealStage(input: {\n    id: 1,\n    name: \"Qualified Lead\",\n    position: 2\n  }) {\n    id\n    name\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Delete Deal Stage",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  removeDealStage(id: 2)\n}"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Deals",
+      "item": [
+        {
+          "name": "Create Deal",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createDeal(input: {\n    title: \"Big Software Deal\",\n    value: 50000,\n    customerId: 1,\n    stageId: 1,\n    products: [\n      {\n        productId: 1,\n        quantity: 2,\n        unitPrice: 1200,\n        totalPrice: 2400\n      }\n    ]\n  }) {\n    id\n    title\n    value\n    dealProducts {\n      totalPrice\n      product {\n        name\n      }\n    }\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Get All Deals",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  deals {\n    id\n    title\n    value\n    stage {\n      name\n    }\n    customer {\n      name\n    }\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Get Deal By ID",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  deal(id: 1) {\n    id\n    title\n    dealProducts {\n      totalPrice\n    }\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Update Deal",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  updateDeal(input: {\n    id: 1,\n    title: \"Updated Deal Title\",\n    value: 60000\n  }) {\n    id\n    title\n    value\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Delete Deal",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  removeDeal(id: 2)\n}"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Activities",
+      "item": [
+        {
+          "name": "Create Activity",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createActivity(input: {\n    description: \"Called the customer to discuss pricing\",\n    dealId: 1,\n    userId: 1\n  }) {\n    id\n    description\n    createdAt\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Get All Activities",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  activities {\n    id\n    description\n    deal {\n      title\n    }\n    user {\n      fullName\n    }\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Get Activity By ID",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  activity(id: 1) {\n    id\n    description\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Update Activity",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  updateActivity(input: {\n    id: 1,\n    description: \"Emailed the customer the new proposal\"\n  }) {\n    id\n    description\n  }\n}"
+              }
+            }
+          }
+        },
+        {
+          "name": "Delete Activity",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "http://localhost:5000/graphql",
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  removeActivity(id: 2)\n}"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwt_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "jwt_token",
+      "value": ""
+    }
+  ]
+}

@@ -90,7 +90,11 @@ export class UsersService {
 
             const user = this.buildUser(dto, passwordHash);
 
-            return this.userRepository.save(user);
+            const savedUser = await this.userRepository.save(user);
+            return this.userRepository.findOneOrFail({ 
+                where: { id: savedUser.id }, 
+                relations: { role: true, manager: true } 
+            });
     }
     
 
@@ -199,7 +203,11 @@ export class UsersService {
 
         this.applyUserUpdates(user, dto);
 
-        return this.userRepository.save(user);
+        await this.userRepository.save(user);
+        return this.userRepository.findOneOrFail({ 
+            where: { id: user.id }, 
+            relations: { role: true, manager: true } 
+        });
     }
 
 // Update Password[]
@@ -259,7 +267,7 @@ export class UsersService {
 async deleteUser(id: number): Promise<boolean> {
   const user = await this.getUserOrThrow(id);
 
-  await this.userRepository.delete(user);
+  await this.userRepository.delete(user.id);
 
   return true;
 }

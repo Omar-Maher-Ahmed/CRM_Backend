@@ -18,8 +18,9 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { GraphQLError } from 'graphql';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -48,7 +49,7 @@ import { GlobalExceptionFilter } from './common/filters/global-exception.filter'
         return {
           message: originalError?.message || error.message,
           statusCode: originalError?.statusCode || error.extensions?.statusCode || 500,
-          errorType: error.extensions?.code || 'SERVER_ERROR',
+          errorType: (originalError?.statusCode === 404 ? 'NOT_FOUND' : (originalError?.statusCode === 400 ? 'BAD_REQUEST' : (error.extensions?.code || 'SERVER_ERROR'))),
           path: error.path,
         };
       },
@@ -76,6 +77,10 @@ import { GlobalExceptionFilter } from './common/filters/global-exception.filter'
     {
       provide: APP_FILTER,
       useClass: GlobalExceptionFilter,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
     }
   ],
 })
