@@ -64,11 +64,20 @@ export class UsersService {
         dto: CreateUserInput,
         passwordHash : string,
     ){
-        return this.userRepository.create({
-        ...dto,
-        passwordHash,
-        isActive: true,
-    });
+        const user = this.userRepository.create({
+            ...dto,
+            passwordHash,
+            isActive: true,
+        });
+
+        if (dto.roleId) {
+            user.role = { id: dto.roleId } as any;
+        }
+        if (dto.managerId) {
+            user.manager = { id: dto.managerId } as any;
+        }
+
+        return user;
     }
 
     // Create User
@@ -166,6 +175,14 @@ export class UsersService {
 
     if (dto.salary !== undefined) {
         user.salary = dto.salary;
+    }
+    
+    if (dto.roleId !== undefined) {
+        user.role = dto.roleId ? ({ id: dto.roleId } as any) : null;
+    }
+
+    if (dto.managerId !== undefined) {
+        user.manager = dto.managerId ? ({ id: dto.managerId } as any) : null;
     }
     return user;
     }

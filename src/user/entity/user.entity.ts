@@ -1,4 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Role } from '../../role/entities/role.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -36,9 +37,9 @@ export class User {
     @Column()
     salary: number;
 
-    // TODO after create role module
-    // @ManyToOne()
-    // role: Role;
+    @Field(() => Role, { nullable: true })
+    @ManyToOne(() => Role, (role) => role.users, { nullable: true })
+    role: Role;
 
     @ManyToOne(() => User, (user) => user.employees,{
           nullable: true,

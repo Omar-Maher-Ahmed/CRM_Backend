@@ -17,8 +17,8 @@ export class CreateUserInput {
   @Field(() => Float)
   salary: number;
 
-//   @Field(() => ID)
-//   roleId: number;
+  @Field(() => ID, { nullable: true })
+  roleId?: number;
 
   @Field(() => ID, { nullable: true })
   managerId?: number;

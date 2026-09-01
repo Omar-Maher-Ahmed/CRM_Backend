@@ -6,6 +6,7 @@ import { DataSource } from 'typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { RoleModule } from './role/role.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
@@ -15,6 +16,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
   imports: [
     UserModule,
     AuthModule,
+    RoleModule,
     ThrottlerModule.forRoot([{
       ttl: 60000,
       limit: 7,
