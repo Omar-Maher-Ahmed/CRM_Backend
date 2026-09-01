@@ -162,7 +162,7 @@ input CreateCustomerInput {
   email: String
   phone: String
   status: String
-  managerId: ID
+  managerId: Int
 }
 
 input UpdateCustomerInput {
@@ -171,7 +171,7 @@ input UpdateCustomerInput {
   email: String
   phone: String
   status: String
-  managerId: ID
+  managerId: Int
   id: ID!
 }
 
@@ -204,14 +204,14 @@ input UpdateDealStageInput {
 input CreateDealInput {
   title: String!
   value: Float
-  customerId: ID
-  ownerId: ID
-  stageId: ID
+  customerId: Int
+  ownerId: Int
+  stageId: Int
   products: [CreateDealProductInput!]
 }
 
 input CreateDealProductInput {
-  productId: ID!
+  productId: Int!
   quantity: Int!
   unitPrice: Float!
   totalPrice: Float!
@@ -220,24 +220,24 @@ input CreateDealProductInput {
 input UpdateDealInput {
   title: String
   value: Float
-  customerId: ID
-  ownerId: ID
-  stageId: ID
+  customerId: Int
+  ownerId: Int
+  stageId: Int
   products: [CreateDealProductInput!]
   id: ID!
 }
 
 input CreateActivityInput {
   description: String
-  dealId: ID
-  userId: ID
-  productId: ID
+  dealId: Int
+  userId: Int
+  productId: Int
 }
 
 input UpdateActivityInput {
   description: String
-  dealId: ID
-  userId: ID
-  productId: ID
+  dealId: Int
+  userId: Int
+  productId: Int
   id: ID!
 }
