@@ -7,6 +7,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { RoleModule } from './role/role.module';
+import { CustomerModule } from './customer/customer.module';
+import { ProductModule } from './product/product.module';
+import { DealStageModule } from './deal-stage/deal-stage.module';
+import { DealModule } from './deal/deal.module';
+import { ActivityModule } from './activity/activity.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
@@ -17,6 +22,11 @@ import { ThrottlerModule } from '@nestjs/throttler';
     UserModule,
     AuthModule,
     RoleModule,
+    CustomerModule,
+    ProductModule,
+    DealStageModule,
+    DealModule,
+    ActivityModule,
     ThrottlerModule.forRoot([{
       ttl: 60000,
       limit: 7,
