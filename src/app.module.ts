@@ -17,8 +17,9 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { Logger } from '@nestjs/common';
 import { GraphQLError } from 'graphql';
+import { APP_FILTER } from '@nestjs/core';
+import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 
 @Module({
   imports: [
@@ -35,25 +36,18 @@ import { GraphQLError } from 'graphql';
       ttl: 60000,
       limit: 7,
     }]),
-    ConfigModule.forRoot(
-      {
-        isGlobal: true,
-      }),
-
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       introspection: true,
       formatError: (error: GraphQLError) => {
-        const logger = new Logger('GlobalErrorHandler');
-        // تسجيل الخطأ في السيرفر (Logging)
-        logger.error(`[GraphQL Error]: ${error.message}`, error.stack);
-        
-        // توحيد شكل الرسالة للفرونت إند (Formatting)
         const originalError = error.extensions?.originalError as any;
         return {
           message: originalError?.message || error.message,
-          statusCode: originalError?.statusCode || 500,
+          statusCode: originalError?.statusCode || error.extensions?.statusCode || 500,
           errorType: error.extensions?.code || 'SERVER_ERROR',
           path: error.path,
         };
@@ -63,15 +57,6 @@ import { GraphQLError } from 'graphql';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
-        console.log('DB Config', {
-          type: 'postgres',
-          host: config.get('DB_HOST'),
-          port: config.get('DB_PORT'),
-          username: config.get('DB_USERNAME'),
-          database: config.get('DB_DATABASE'),
-        });
-
-        // console.log("✅ PostgreSQL Connected Successfully")
         return {
           type: 'postgres',
           host: config.getOrThrow('DB_HOST'),
@@ -85,18 +70,20 @@ import { GraphQLError } from 'graphql';
       },
     })
   ],
-
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: GlobalExceptionFilter,
+    }
+  ],
 })
-
-
 export class AppModule {
   constructor(private dataSource: DataSource) { }
 
   async onModuleInit() {
     await this.dataSource.query('SELECT NOW()');
-
     console.log('✅ PostgreSQL Connected Successfully!!');
   }
 }

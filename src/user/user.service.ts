@@ -25,6 +25,7 @@ export class UsersService {
 
     //checkEmailExists
     private async checkEmailExists(email: string): Promise<void> {
+    if (!email) return;
     const existingUser = await this.userRepository.findOne({
         where: { email },
     });
@@ -37,6 +38,7 @@ export class UsersService {
 
     //checkPhoneExists
     private async checkPhoneExists(phone: string): Promise<void> {
+    if (!phone) return;
     const existingUser = await this.userRepository.findOne({
         where: { phone },
     });
