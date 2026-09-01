@@ -12,10 +12,13 @@ import { ProductModule } from './product/product.module';
 import { DealStageModule } from './deal-stage/deal-stage.module';
 import { DealModule } from './deal/deal.module';
 import { ActivityModule } from './activity/activity.module';
+import { SeederModule } from './seeder/seeder.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { Logger } from '@nestjs/common';
+import { GraphQLError } from 'graphql';
 
 @Module({
   imports: [
@@ -27,6 +30,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     DealStageModule,
     DealModule,
     ActivityModule,
+    SeederModule,
     ThrottlerModule.forRoot([{
       ttl: 60000,
       limit: 7,
@@ -40,6 +44,20 @@ import { ThrottlerModule } from '@nestjs/throttler';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       introspection: true,
+      formatError: (error: GraphQLError) => {
+        const logger = new Logger('GlobalErrorHandler');
+        // تسجيل الخطأ في السيرفر (Logging)
+        logger.error(`[GraphQL Error]: ${error.message}`, error.stack);
+        
+        // توحيد شكل الرسالة للفرونت إند (Formatting)
+        const originalError = error.extensions?.originalError as any;
+        return {
+          message: originalError?.message || error.message,
+          statusCode: originalError?.statusCode || 500,
+          errorType: error.extensions?.code || 'SERVER_ERROR',
+          path: error.path,
+        };
+      },
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
